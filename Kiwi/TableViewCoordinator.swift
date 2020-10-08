@@ -29,6 +29,13 @@ public class TableViewCoordinator {
     private var controller: ObservableController
     public var animateChanges: Bool = false
     private let section: Int
+    public var isEnabled = true {
+        didSet {
+            if isEnabled && !oldValue {
+                tableView?.reloadData()
+            }
+        }
+    }
 
     // MARK: - InteractorTableViewManager methods
 
@@ -46,11 +53,15 @@ public class TableViewCoordinator {
 
 extension TableViewCoordinator: ListControllerObserver {
     public func controller(_ controller: StatefulController, didChange fromState: ControllerState, to state: ControllerState) {
+        guard isEnabled else {
+            return
+        }
         tableView?.reloadData()
     }
 
     public func listControllerWillChangeContent(_ controller: StatefulController) {
         guard
+            isEnabled,
             let tableView = tableView,
             animateChanges
         else {
@@ -62,6 +73,7 @@ extension TableViewCoordinator: ListControllerObserver {
 
     public func listController(_ controller: StatefulController, did changeType: ChangeType) {
         guard
+            isEnabled,
             let tableView = tableView,
             animateChanges
         else {
@@ -79,12 +91,16 @@ extension TableViewCoordinator: ListControllerObserver {
             tableView.reloadRows(at: [IndexPath(row: index, section: section)], with: .fade)
 
         case .move(from: let fromIndex, to: let toIndex):
-            tableView.moveRow(at: IndexPath(row: fromIndex, section: section), to: IndexPath(row: toIndex, section: section))
+            tableView.deleteRows(at: [IndexPath(row: fromIndex, section: section)], with: .fade)
+            tableView.insertRows(at: [IndexPath(row: toIndex, section: section)], with: .fade)
         }
     }
 
     public func listControllerDidChangeContent(_ controller: StatefulController) {
-        guard let tableView = tableView else {
+        guard
+            isEnabled,
+            let tableView = tableView
+        else {
             return
         }
 

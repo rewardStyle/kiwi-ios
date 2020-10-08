@@ -24,18 +24,18 @@
 
 import Foundation
 
-class ArrayListController<R: Hashable> {
-    typealias Item = R
+open class ArrayListController<R: Hashable> {
+    public typealias Item = R
     private var weakObservers = WeakSet<AnyObject>()
     internal var items: [R]
-    internal var state: ControllerState
+    public internal(set) var state: ControllerState
 
-    init(items: [R]) {
+    public init(items: [R]) {
         self.items = items
         self.state = .loaded
     }
 
-    func append(_ item: R) {
+    public func append(_ item: R) {
         notifyWillChangeContent()
         let index = items.count
         items.append(item)
@@ -43,21 +43,21 @@ class ArrayListController<R: Hashable> {
         notifyDidChangeContent()
     }
 
-    func remove(_ index: Int) {
+    public func remove(_ index: Int) {
         notifyWillChangeContent()
         items.remove(at: index)
         notifyDid(.delete(at: index))
         notifyDidChangeContent()
     }
 
-    func insert(_ item: R, at index: Int) {
+    public func insert(_ item: R, at index: Int) {
         notifyWillChangeContent()
         items.insert(item, at: index)
         notifyDid(.insert(at: index))
         notifyDidChangeContent()
     }
 
-    func move(from: Int, to: Int) {
+    public func move(from: Int, to: Int) {
         notifyWillChangeContent()
         let item = items[from]
         items.remove(at: from)
@@ -65,10 +65,20 @@ class ArrayListController<R: Hashable> {
         notifyDid(.move(from: from, to: to))
         notifyDidChangeContent()
     }
+
+    public func setItems(_ items: [R]) {
+        self.items.removeAll()
+        self.items.append(contentsOf: items)
+        setState(.loaded)
+    }
+
+    public func allItems() -> [R] {
+        return items
+    }
 }
 
 extension ArrayListController: ObservableController {
-    func setState(_ state: ControllerState) {
+    public func setState(_ state: ControllerState) {
         let fromState = self.state
         self.state = state
         for observer in observers {
@@ -76,11 +86,11 @@ extension ArrayListController: ObservableController {
         }
     }
 
-    var observers: [ControllerObserver] {
+    public var observers: [ControllerObserver] {
         return weakObservers.allObjects as! [ControllerObserver]
     }
 
-    func addObserver(_ observer: ControllerObserver) {
+    public func addObserver(_ observer: ControllerObserver) {
         weakObservers.insert(observer)
     }
 
@@ -90,19 +100,19 @@ extension ArrayListController: ObservableController {
 }
 
 extension ArrayListController: ListController {
-    var numberOfItems: Int {
+    public var numberOfItems: Int {
         return items.count
     }
 
-    func itemAt(_ index: Int) -> R? {
+    public func itemAt(_ index: Int) -> R? {
         return items[index]
     }
 
-    func indexOf(_ item: R) -> Int? {
+    public func indexOf(_ item: R) -> Int? {
         return nil
     }
 
-    func stateAt(_ index: Int) -> ControllerState {
+    public func stateAt(_ index: Int) -> ControllerState {
         return .loaded
     }
 }

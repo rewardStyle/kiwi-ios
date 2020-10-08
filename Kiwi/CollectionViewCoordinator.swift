@@ -49,13 +49,9 @@ extension CollectionViewCoordinator: ListControllerObserver {
         collectionView?.reloadData()
     }
 
-    public func listControllerWillChangeContent(_ controller: StatefulController) {
-        // TODO
-    }
+    public func listControllerWillChangeContent(_ controller: StatefulController) {}
 
-    public func listController(_ controller: StatefulController, did changeType: ChangeType) {
-        // TODO
-    }
+    public func listController(_ controller: StatefulController, did changeType: ChangeType) {}
 
     public func listControllerDidChangeContent(_ controller: StatefulController) {
         // TODO

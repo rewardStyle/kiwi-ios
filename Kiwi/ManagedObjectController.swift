@@ -96,7 +96,7 @@ public class ManagedObjectController {
             !deletedObjects.isEmpty,
             deletedObjects.contains(object)
         {
-            setState(.error(NSError(domain: "coreData", code: 404, userInfo: [NSLocalizedDescriptionKey: "Object no longer available"])))
+            setState(.error(NSError(domain: "Kiwi", code: 404, userInfo: [NSLocalizedDescriptionKey: "Object no longer available"])))
             return
         }
 

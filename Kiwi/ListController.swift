@@ -47,7 +47,7 @@ public protocol ListController: ObservableController {
 }
 
 extension ListController {
-    internal func notifyWillChangeContent() {
+    public func notifyWillChangeContent() {
         for observer in observers {
             guard let observer = observer as? ListControllerObserver else {
                 continue
@@ -56,7 +56,7 @@ extension ListController {
         }
     }
 
-    internal func notifyDid(_ changeType: ChangeType) {
+    public func notifyDid(_ changeType: ChangeType) {
         for observer in observers {
             guard let observer = observer as? ListControllerObserver else {
                 continue
@@ -65,7 +65,7 @@ extension ListController {
         }
     }
 
-    internal func notifyDidChangeContent() {
+    public func notifyDidChangeContent() {
         for observer in observers {
             guard let observer = observer as? ListControllerObserver else {
                 continue

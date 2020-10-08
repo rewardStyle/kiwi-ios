@@ -33,12 +33,18 @@ open class FetchedListController<R: NSManagedObject>: NSObject, NSFetchedResults
 
     public init(fetchRequest: NSFetchRequest<R>, context: NSManagedObjectContext) {
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        state = .notLoaded
+        super.init()
+        fetchedResultsController.delegate = self
+    }
 
+    public func performLoad() {
+        setState(.loading)
         do {
             try fetchedResultsController.performFetch()
-            state = .loaded
+            setState(.loaded)
         } catch {
-            state = .error(error)
+            setState(.error(error))
         }
 
         super.init()
@@ -79,8 +85,6 @@ open class FetchedListController<R: NSManagedObject>: NSObject, NSFetchedResults
             }
 
             notifyDid(.update(at: index))
-        @unknown default:
-            fatalError()
         }
     }
 
