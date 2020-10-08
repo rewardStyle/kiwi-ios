@@ -94,7 +94,7 @@ extension ArrayListController: ObservableController {
         weakObservers.insert(observer)
     }
 
-    func removeObserver(_ observer: ControllerObserver) {
+    public func removeObserver(_ observer: ControllerObserver) {
         weakObservers.remove(observer)
     }
 }

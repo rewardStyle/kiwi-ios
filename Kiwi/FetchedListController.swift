@@ -46,9 +46,6 @@ open class FetchedListController<R: NSManagedObject>: NSObject, NSFetchedResults
         } catch {
             setState(.error(error))
         }
-
-        super.init()
-        fetchedResultsController.delegate = self
     }
 
     public func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
