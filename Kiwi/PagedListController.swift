@@ -127,6 +127,9 @@ open class PagedListController<R: URIdentifiable>: NSObject {
 
             if let error = error {
                 page?.state = .error(error)
+                //TODO: A page download has failed with previous pages already loaded
+                //for now we don't wont the listController state set to error
+                //Anyway forward a message to UI is needed
                 self.setState(.error(error))
                 completion(error)
             } else {
